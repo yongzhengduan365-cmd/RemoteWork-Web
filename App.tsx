@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { Search, Briefcase, Filter, X, SlidersHorizontal, Check } from 'lucide-react';
+import { Search, Briefcase, Filter, X, SlidersHorizontal, Check, Mail, Globe, MessageCircle, ExternalLink } from 'lucide-react';
 import { PLATFORMS, INDUSTRIES } from './constants';
 import { JobType, PlatformType, SalaryTier } from './types';
 import PlatformCard from './components/PlatformCard';
@@ -110,7 +110,7 @@ const App: React.FC = () => {
                   : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
               }`}
             >
-              {lang === 'ALL' ? '全部' : lang === 'CN' ? '国内' : '全球'}
+              {lang === 'ALL' ? '全部' : lang === 'CN' ? '🇨🇳 国内' : '🌏 Global'}
             </button>
           ))}
         </div>
@@ -120,23 +120,19 @@ const App: React.FC = () => {
       <div className="space-y-3">
         <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">行业领域</h4>
         <div className="space-y-2">
-          {INDUSTRIES.map(ind => (
-            <label key={ind} className="flex items-center gap-3 cursor-pointer group">
-              <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${
-                selectedIndustries.includes(ind) 
-                  ? 'bg-blue-600 border-blue-600' 
-                  : 'bg-white border-slate-300 group-hover:border-blue-400'
-              }`}>
-                {selectedIndustries.includes(ind) && <Check size={10} className="text-white" />}
+          {INDUSTRIES.map(industry => (
+            <label key={industry} className="flex items-center gap-2 cursor-pointer group">
+              <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${selectedIndustries.includes(industry) ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-300 group-hover:border-blue-400'}`}>
+                {selectedIndustries.includes(industry) && <Check size={10} className="text-white" />}
               </div>
               <input 
                 type="checkbox" 
                 className="hidden"
-                checked={selectedIndustries.includes(ind)}
-                onChange={() => toggleSelection(ind, selectedIndustries, setSelectedIndustries)}
+                checked={selectedIndustries.includes(industry)}
+                onChange={() => toggleSelection(industry, selectedIndustries, setSelectedIndustries)}
               />
-              <span className={`text-sm ${selectedIndustries.includes(ind) ? 'text-slate-900 font-medium' : 'text-slate-600'}`}>
-                {ind}
+              <span className={`text-sm ${selectedIndustries.includes(industry) ? 'text-slate-900 font-medium' : 'text-slate-600'}`}>
+                {industry}
               </span>
             </label>
           ))}
@@ -145,13 +141,13 @@ const App: React.FC = () => {
 
       {/* Job Types */}
       <div className="space-y-3">
-        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">工作性质</h4>
+        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">工作类型</h4>
         <div className="flex flex-wrap gap-2">
           {['Full-time', 'Part-time', 'Contract', 'Freelance'].map((type) => (
             <button
               key={type}
               onClick={() => toggleSelection(type as JobType, selectedJobTypes, setSelectedJobTypes)}
-              className={`px-3 py-1.5 rounded-full text-xs border transition-all ${
+              className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${
                 selectedJobTypes.includes(type as JobType)
                   ? 'bg-blue-50 text-blue-700 border-blue-200 font-medium'
                   : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
@@ -163,50 +159,45 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* Salary Tier */}
-      <div className="space-y-3">
-        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">收入潜力</h4>
-        <div className="flex gap-2">
-          {(['$', '$$', '$$$'] as SalaryTier[]).map((tier) => (
-            <button
-              key={tier}
-              onClick={() => toggleSelection(tier, selectedSalaryTiers, setSelectedSalaryTiers)}
-              className={`flex-1 py-2 rounded-lg border text-sm font-medium transition-colors ${
-                selectedSalaryTiers.includes(tier)
-                  ? 'bg-green-50 text-green-700 border-green-200'
-                  : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-              }`}
-              title={tier === '$' ? '入门 / 微任务' : tier === '$$' ? '中等 / 市场价' : '高薪 / 精英'}
-            >
-              {tier}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Platform Types */}
-      <div className="space-y-3">
+       {/* Platform Types */}
+       <div className="space-y-3">
         <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">平台类型</h4>
         <div className="space-y-2">
-          {['Job Board', 'Freelance Market', 'Community', 'Aggregator'].map((pt) => (
-            <label key={pt} className="flex items-center gap-3 cursor-pointer group">
-              <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
-                selectedPlatformTypes.includes(pt as PlatformType) 
-                  ? 'bg-blue-600 border-blue-600' 
-                  : 'bg-white border-slate-300 group-hover:border-blue-400'
-              }`}>
-                {selectedPlatformTypes.includes(pt as PlatformType) && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+          {['Job Board', 'Freelance Market', 'Community', 'Aggregator'].map((type) => (
+            <label key={type} className="flex items-center gap-2 cursor-pointer group">
+               <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${selectedPlatformTypes.includes(type as PlatformType) ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-300 group-hover:border-blue-400'}`}>
+                {selectedPlatformTypes.includes(type as PlatformType) && <Check size={10} className="text-white" />}
               </div>
               <input 
                 type="checkbox" 
                 className="hidden"
-                checked={selectedPlatformTypes.includes(pt as PlatformType)}
-                onChange={() => toggleSelection(pt as PlatformType, selectedPlatformTypes, setSelectedPlatformTypes)}
+                checked={selectedPlatformTypes.includes(type as PlatformType)}
+                onChange={() => toggleSelection(type as PlatformType, selectedPlatformTypes, setSelectedPlatformTypes)}
               />
-              <span className={`text-sm ${selectedPlatformTypes.includes(pt as PlatformType) ? 'text-slate-900 font-medium' : 'text-slate-600'}`}>
-                {pt}
+              <span className={`text-sm ${selectedPlatformTypes.includes(type as PlatformType) ? 'text-slate-900 font-medium' : 'text-slate-600'}`}>
+                {type}
               </span>
             </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Salary Tier */}
+      <div className="space-y-3">
+        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">薪资等级</h4>
+        <div className="flex gap-2">
+          {['$', '$$', '$$$'].map((tier) => (
+            <button
+              key={tier}
+              onClick={() => toggleSelection(tier as SalaryTier, selectedSalaryTiers, setSelectedSalaryTiers)}
+              className={`flex-1 py-1.5 text-xs font-bold rounded-md border transition-colors ${
+                selectedSalaryTiers.includes(tier as SalaryTier)
+                  ? 'bg-green-50 text-green-700 border-green-200'
+                  : 'bg-white text-slate-400 border-slate-200 hover:border-slate-300'
+              }`}
+            >
+              {tier}
+            </button>
           ))}
         </div>
       </div>
@@ -214,96 +205,98 @@ const App: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 pb-20 font-sans">
+    <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
       {/* Navbar */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="h-16 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="bg-gradient-to-br from-blue-600 to-indigo-600 p-2 rounded-lg text-white shadow-md">
-                <Briefcase size={20} />
-              </div>
-              <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 hidden sm:block">
-                RemoteHub
-              </h1>
+      <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+          
+          {/* Logo */}
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-blue-200 shadow-lg">
+              R
             </div>
-            
-            {/* Search Bar - Centered */}
-            <div className="flex-1 max-w-lg">
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
-                  <Search size={18} />
-                </div>
-                <input
-                  type="text"
-                  placeholder="搜索平台、技能 (Python, 设计)..."
-                  className="block w-full pl-10 pr-4 py-2 border border-slate-200 rounded-full leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all text-sm"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-            </div>
-
-            {/* Mobile Filter Toggle */}
-            <button 
-              className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg relative"
-              onClick={() => setIsMobileFilterOpen(true)}
-            >
-              <SlidersHorizontal size={20} />
-              {activeFilterCount > 0 && (
-                <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-blue-600 rounded-full border-2 border-white" />
-              )}
-            </button>
+            <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500 hidden sm:block">
+              RemoteHub
+            </h1>
           </div>
+
+          {/* Search Bar */}
+          <div className="flex-1 max-w-lg relative group">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search className="h-4 w-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+            </div>
+            <input
+              type="text"
+              className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-full leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all sm:text-sm"
+              placeholder="搜索平台、技能或关键字..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          {/* Mobile Filter Toggle */}
+          <button 
+            className="lg:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-lg relative"
+            onClick={() => setIsMobileFilterOpen(true)}
+          >
+            <SlidersHorizontal size={20} />
+            {activeFilterCount > 0 && (
+              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-blue-600 rounded-full border-2 border-white"></span>
+            )}
+          </button>
+
+          {/* Github / About Link (Placeholder) */}
+          <a href="#" className="hidden sm:flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-900">
+             <Globe size={16} />
+             <span>About</span>
+          </a>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Content */}
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           
           {/* Desktop Sidebar */}
           <aside className="hidden lg:block w-64 shrink-0">
-            <div className="bg-white rounded-xl border border-slate-200 p-6 sticky top-24 shadow-sm">
+            <div className="sticky top-24">
               <FilterSidebar />
             </div>
           </aside>
 
-          {/* Mobile Drawer */}
+          {/* Mobile Sidebar Drawer */}
           {isMobileFilterOpen && (
             <div className="fixed inset-0 z-50 lg:hidden">
-              <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={() => setIsMobileFilterOpen(false)} />
-              <div className="absolute inset-y-0 right-0 w-[85vw] max-w-sm bg-white shadow-xl flex flex-col animate-in slide-in-from-right duration-300">
-                <div className="flex items-center justify-between p-4 border-b border-slate-100">
-                  <h2 className="font-bold text-lg text-slate-800">筛选条件</h2>
-                  <button onClick={() => setIsMobileFilterOpen(false)} className="p-2 hover:bg-slate-100 rounded-full text-slate-500">
-                    <X size={20} />
+              <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setIsMobileFilterOpen(false)} />
+              <div className="absolute inset-y-0 right-0 w-80 bg-white shadow-2xl p-6 overflow-y-auto animate-in slide-in-from-right duration-300">
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-lg font-bold">筛选条件</h2>
+                  <button onClick={() => setIsMobileFilterOpen(false)} className="p-1 hover:bg-slate-100 rounded-full">
+                    <X size={24} className="text-slate-500" />
                   </button>
                 </div>
-                <div className="flex-1 overflow-y-auto p-6">
-                  <FilterSidebar />
-                </div>
-                <div className="p-4 border-t border-slate-100 bg-slate-50">
+                <FilterSidebar />
+                <div className="mt-8 pt-4 border-t border-slate-100">
                   <button 
                     onClick={() => setIsMobileFilterOpen(false)}
-                    className="w-full bg-blue-600 text-white font-medium py-3 rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20"
+                    className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200"
                   >
-                    查看 {filteredPlatforms.length} 个结果
+                    显示 {filteredPlatforms.length} 个结果
                   </button>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Main Grid */}
-          <main className="flex-1 min-w-0">
+          {/* Results Grid */}
+          <div className="flex-1">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="font-bold text-xl text-slate-800">
-                平台列表
+              <h2 className="text-xl font-bold text-slate-800">
+                {searchQuery ? '搜索结果' : '所有平台'} 
                 <span className="ml-2 text-sm font-normal text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
                   {filteredPlatforms.length}
                 </span>
               </h2>
-              {/* Optional: Simple Sort could go here */}
             </div>
 
             {filteredPlatforms.length > 0 ? (
@@ -313,36 +306,92 @@ const App: React.FC = () => {
                 ))}
               </div>
             ) : (
-              <div className="bg-white rounded-2xl border border-dashed border-slate-200 p-12 text-center">
-                <div className="mx-auto w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4 text-slate-300">
-                  <Search size={32} />
+              <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-slate-300">
+                <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Search className="text-slate-400" size={32} />
                 </div>
-                <h3 className="text-lg font-medium text-slate-900">未找到符合条件的平台</h3>
-                <p className="mt-2 text-slate-500 text-sm">尝试减少筛选条件，或使用更通用的搜索关键词。</p>
+                <h3 className="text-lg font-medium text-slate-900 mb-1">没有找到相关平台</h3>
+                <p className="text-slate-500 text-sm mb-4">尝试调整筛选条件或搜索关键词</p>
                 <button 
                   onClick={clearFilters}
-                  className="mt-6 px-6 py-2.5 bg-white border border-slate-300 hover:border-blue-400 hover:text-blue-600 text-slate-700 font-medium rounded-lg transition-colors"
+                  className="text-blue-600 font-medium hover:underline"
                 >
                   清空所有筛选
                 </button>
               </div>
             )}
-          </main>
+          </div>
         </div>
-      </div>
+      </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 mt-auto py-12">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="flex justify-center gap-2 mb-4">
-             <Briefcase className="text-blue-600" size={24} />
+      <footer className="mt-auto border-t border-slate-200 bg-white pt-12 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-12">
+            
+            {/* Brand Section */}
+            <div className="col-span-1">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">R</div>
+                <span className="font-bold text-slate-800 text-lg">RemoteHub</span>
+              </div>
+              <p className="text-sm text-slate-500 leading-relaxed mb-6">
+                致力于为全球数字游民、自由职业者和远程工作者提供最全面的平台导航服务。发现机会，连接世界。
+              </p>
+              <div className="text-xs text-slate-400">
+                &copy; {new Date().getFullYear()} RemoteHub. All rights reserved.
+              </div>
+            </div>
+
+            {/* Contact Section - UPDATED */}
+            <div className="col-span-1">
+              <h4 className="font-bold text-slate-900 mb-4">联系我们 / Contact</h4>
+              <div className="space-y-3">
+                 <div className="flex items-start gap-3 text-sm text-slate-600 group">
+                    <Mail size={18} className="text-slate-400 group-hover:text-blue-500 mt-0.5 transition-colors" />
+                    <div>
+                      <div className="text-xs text-slate-400 mb-0.5">Email</div>
+                      <a href="mailto:yongzhengduan365@gmail.com" className="hover:text-blue-600 font-medium transition-colors break-all">
+                        yongzhengduan365@gmail.com
+                      </a>
+                    </div>
+                 </div>
+                 <div className="flex items-start gap-3 text-sm text-slate-600 group">
+                    <MessageCircle size={18} className="text-slate-400 group-hover:text-green-500 mt-0.5 transition-colors" />
+                    <div>
+                      <div className="text-xs text-slate-400 mb-0.5">WeChat</div>
+                      <span className="font-medium hover:text-green-600 transition-colors cursor-text selection:bg-green-100">
+                        _41zcfirsteat
+                      </span>
+                    </div>
+                 </div>
+              </div>
+            </div>
+
+            {/* Cooperation & Links */}
+            <div className="col-span-1">
+              <h4 className="font-bold text-slate-900 mb-4">商务合作 / Business</h4>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <a href="mailto:yongzhengduan365@gmail.com?subject=Platform Submission" className="flex items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors">
+                    <Check size={16} className="text-blue-500" />
+                    <span>提交新平台收录</span>
+                  </a>
+                </li>
+                 <li>
+                  <a href="mailto:yongzhengduan365@gmail.com?subject=Business Inquiry" className="flex items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors">
+                    <ExternalLink size={16} className="text-blue-500" />
+                    <span>广告与置顶合作</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
           </div>
-          <p className="text-slate-500 text-sm">
-            &copy; {new Date().getFullYear()} RemoteHub. 汇集全球优质远程工作资源
-          </p>
         </div>
       </footer>
 
+      {/* AI Assistant */}
       <AiAdvisor />
     </div>
   );
