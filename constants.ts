@@ -1,6 +1,16 @@
 
 import { Platform } from './types';
 
+// =====================================================================
+// 🟢 管理指南：如何添加新内容
+// =====================================================================
+// 这个文件是整个网站的“数据库”。只需修改这里，网站内容就会自动更新。
+
+// ---------------------------------------------------------------------
+// 1. 行业板块 (Industries)
+// ---------------------------------------------------------------------
+// 在下方数组中添加新的行业名称（英文），它会自动出现在左侧的“行业领域”筛选器中。
+// 这里的名称必须与下方 PLATFORMS 里的 industries 字段对应。
 export const INDUSTRIES = [
   'Development',
   'Design',
@@ -10,10 +20,33 @@ export const INDUSTRIES = [
   'Customer Support',
   'Operations',
   'Sales'
+  // 示例: 在这里添加 'Data Science' 或 'Virtual Assistant'
 ];
 
+// ---------------------------------------------------------------------
+// 2. 平台列表 (Platforms)
+// ---------------------------------------------------------------------
+// 要添加新网站，请复制下面的 [模版对象]，修改内容后粘贴到 PLATFORMS 数组中。
+
+/* --- 复制开始 ---
+  {
+    id: 'unique-id-here',          // 唯一ID，英文，不要重复 (例如: 'zhilian-zhaopin')
+    name: '网站名称',               // 显示在卡片标题
+    description: '简短描述...',     // 显示在卡片正文 (建议30-50字)
+    url: 'https://example.com',    // 网站链接
+    logoColor: '#3b82f6',          // Logo背景色 (Hex颜色码)
+    platformType: 'Job Board',     // 类型 (只能选): 'Job Board'(招聘板) | 'Freelance Market'(众包) | 'Community'(社区) | 'Aggregator'(聚合)
+    industries: ['Development'],   // 行业: 必须是上面 INDUSTRIES 列表里有的词
+    jobTypes: ['Full-time'],       // 工作类型: 'Full-time' | 'Part-time' | 'Contract'(合同) | 'Freelance'(自由职业)
+    salaryTier: '$$',              // 薪资等级: '$'(入门/低) | '$$'(中等) | '$$$'(高薪)
+    tags: ['标签1', '标签2'],       // 自定义标签，显示在卡片底部
+    language: 'CN',                // 语言: 'CN'(国内) | 'EN'(国外) | 'BOTH'(都有)
+    popular: false                 // 是否显示 "POPULAR" 热门标签
+  },
+--- 复制结束 --- */
+
 export const PLATFORMS: Platform[] = [
-  // CN Platforms
+  // --- 国内平台 (CN Platforms) ---
   {
     id: 'eleduck',
     name: '电鸭社区',
@@ -67,7 +100,8 @@ export const PLATFORMS: Platform[] = [
     tags: ['聚合', '国内', '互联网'],
     language: 'CN'
   },
-  // Global Platforms
+
+  // --- 全球平台 (Global Platforms) ---
   {
     id: 'upwork',
     name: 'Upwork',
