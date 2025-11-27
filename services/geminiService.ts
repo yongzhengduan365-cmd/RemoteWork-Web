@@ -3,11 +3,19 @@ import { GoogleGenAI } from "@google/genai";
 import { PLATFORMS } from "../constants";
 
 const getClient = () => {
-  const apiKey = process.env.API_KEY;
+  // Safely check for API key in various environment configurations
+  // 1. Vite uses import.meta.env
+  // 2. Webpack/Create-React-App uses process.env
+  // 3. We use a fallback to empty object to prevent 'process is not defined' crash
+  const env = (import.meta as any).env || (typeof process !== 'undefined' ? process.env : {});
+  const apiKey = env.API_KEY || env.VITE_API_KEY || env.REACT_APP_API_KEY;
+
   if (!apiKey) {
-    throw new Error("API Key is missing");
+    console.warn("API Key is missing. AI features will not work.");
+    // Return a dummy client or handle gracefully, but throwing here might crash the app startup if called early
+    // For now, we allow it to proceed but API calls will fail later if key is invalid.
   }
-  return new GoogleGenAI({ apiKey });
+  return new GoogleGenAI({ apiKey: apiKey || 'dummy_key' });
 };
 
 export const getPlatformRecommendation = async (userQuery: string): Promise<string> => {
