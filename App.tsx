@@ -1,10 +1,9 @@
 
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, X, SlidersHorizontal, Check, Mail, Globe, MessageCircle, ExternalLink, Sparkles, Hammer, BarChart, Zap, LayoutGrid, Wrench } from 'lucide-react';
+import { Search, Filter, X, SlidersHorizontal, Check, Mail, Globe, MessageCircle, ExternalLink, Sparkles, BarChart, Zap, LayoutGrid, Wrench } from 'lucide-react';
 import { PLATFORMS, INDUSTRIES, REMOTE_TOOLS, POLL_DATA } from './constants';
 import { JobType, PlatformType, SalaryTier } from './types';
 import PlatformCard from './components/PlatformCard';
-import AiAdvisor from './components/AiAdvisor';
 
 // --- Sub-components for better organization ---
 
@@ -328,18 +327,7 @@ const App: React.FC = () => {
               </span>
             </div>
             
-            <div className="hidden md:flex items-center gap-6">
-              <a href="#" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">首页</a>
-              <a href="#" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">关于</a>
-              <a 
-                href="https://github.com/your-repo" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 bg-slate-900 text-white px-4 py-2 rounded-full text-xs font-bold hover:bg-slate-800 transition-colors shadow-sm hover:shadow-md"
-              >
-                 GitHub
-              </a>
-            </div>
+            {/* Top Navigation Links Removed */}
           </div>
         </div>
       </nav>
@@ -515,19 +503,11 @@ const App: React.FC = () => {
             </div>
           </div>
           
-          <div className="border-t border-slate-100 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-slate-400">
-              © {new Date().getFullYear()} RemoteHub Navigator. Built with React & Gemini AI.
-            </p>
-            <div className="flex gap-4">
-               {/* Social icons could go here */}
-            </div>
-          </div>
+          {/* Copyright section removed */}
         </div>
       </footer>
 
-      {/* AI Advisor Floating Button */}
-      <AiAdvisor />
+      {/* AI Advisor Chat Button Removed */}
     </div>
   );
 };
