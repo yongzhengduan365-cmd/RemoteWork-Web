@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { Search, Filter, X, SlidersHorizontal, Check, Mail, Globe, MessageCircle, ExternalLink, Sparkles, Hammer, BarChart, Zap } from 'lucide-react';
+import { Search, Filter, X, SlidersHorizontal, Check, Mail, Globe, MessageCircle, ExternalLink, Sparkles, Hammer, BarChart, Zap, LayoutGrid, Wrench } from 'lucide-react';
 import { PLATFORMS, INDUSTRIES, REMOTE_TOOLS, POLL_DATA } from './constants';
 import { JobType, PlatformType, SalaryTier } from './types';
 import PlatformCard from './components/PlatformCard';
@@ -74,38 +74,34 @@ const PollWidget = () => {
 };
 
 const ToolSection = () => (
-  <div className="mt-12 mb-8">
-    <div className="flex items-center gap-2 mb-4">
-      <Hammer className="text-blue-600" size={20} />
-      <h2 className="text-xl font-bold text-slate-900">远程工作必备工具</h2>
-    </div>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+  <div className="animate-in fade-in duration-500 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {REMOTE_TOOLS.map((tool) => (
         <a 
           key={tool.id} 
           href={tool.url}
           target="_blank"
           rel="noopener noreferrer"
-          className={`block bg-white rounded-xl border p-4 hover:shadow-lg hover:-translate-y-0.5 transition-all group ${
+          className={`block bg-white rounded-xl border p-5 hover:shadow-lg hover:-translate-y-1 transition-all group ${
             tool.recommended ? 'border-blue-300 ring-1 ring-blue-100' : 'border-slate-200'
           }`}
         >
-          <div className="flex items-start justify-between mb-2">
-            <div className={`text-xs font-bold px-2 py-1 rounded-md mb-2 inline-block ${
+          <div className="flex items-start justify-between mb-3">
+            <div className={`text-xs font-bold px-2.5 py-1 rounded-md inline-block ${
               tool.recommended ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600'
             }`}>
               {tool.category}
             </div>
-            {tool.recommended && <Zap size={14} className="text-amber-500 fill-amber-500" />}
+            {tool.recommended && <Zap size={16} className="text-amber-500 fill-amber-500" />}
           </div>
           
-          <h3 className={`font-bold text-sm mb-1 ${tool.recommended ? 'text-blue-700' : 'text-slate-900'}`}>
+          <h3 className={`font-bold text-base mb-2 ${tool.recommended ? 'text-blue-700' : 'text-slate-900'}`}>
             {tool.name}
           </h3>
-          <p className="text-xs text-slate-600 mb-3 leading-relaxed h-10 line-clamp-2">{tool.description}</p>
-          <div className="text-[10px] text-slate-400 flex items-center gap-1 group-hover:text-blue-600 transition-colors">
+          <p className="text-sm text-slate-600 mb-4 leading-relaxed h-10 line-clamp-2">{tool.description}</p>
+          <div className="text-xs text-slate-400 flex items-center gap-1 group-hover:text-blue-600 transition-colors">
              <span>访问官网</span>
-             <ExternalLink size={10} />
+             <ExternalLink size={12} />
           </div>
         </a>
       ))}
@@ -114,6 +110,9 @@ const ToolSection = () => (
 );
 
 const App: React.FC = () => {
+  // State for View Mode (Tabs)
+  const [activeTab, setActiveTab] = useState<'platforms' | 'tools'>('platforms');
+
   // State for Filters
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -187,7 +186,7 @@ const App: React.FC = () => {
 
   // Filter Sidebar Component
   const FilterSidebar = () => (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-in fade-in slide-in-from-left-4 duration-500">
       {/* Header with Clear Button */}
       <div className="flex items-center justify-between">
         <h3 className="font-semibold text-slate-900 flex items-center gap-2">
@@ -281,26 +280,24 @@ const App: React.FC = () => {
                 checked={selectedPlatformTypes.includes(type as PlatformType)}
                 onChange={() => toggleSelection(type as PlatformType, selectedPlatformTypes, setSelectedPlatformTypes)}
               />
-              <span className={`text-sm ${selectedPlatformTypes.includes(type as PlatformType) ? 'text-slate-900 font-medium' : 'text-slate-600'}`}>
-                {type}
-              </span>
+              <span className="text-sm text-slate-600">{type}</span>
             </label>
           ))}
         </div>
       </div>
 
-      {/* Salary Tier */}
-      <div className="space-y-3">
+       {/* Salary Tier */}
+       <div className="space-y-3">
         <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">薪资等级</h4>
         <div className="flex gap-2">
           {['$', '$$', '$$$'].map((tier) => (
             <button
               key={tier}
               onClick={() => toggleSelection(tier as SalaryTier, selectedSalaryTiers, setSelectedSalaryTiers)}
-              className={`flex-1 py-1.5 text-xs font-bold rounded-md border transition-colors ${
+              className={`flex-1 py-1.5 text-xs font-medium rounded-md border transition-colors ${
                 selectedSalaryTiers.includes(tier as SalaryTier)
                   ? 'bg-green-50 text-green-700 border-green-200'
-                  : 'bg-white text-slate-400 border-slate-200 hover:border-slate-300'
+                  : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
               }`}
             >
               {tier}
@@ -310,216 +307,226 @@ const App: React.FC = () => {
       </div>
 
       {/* Interactive Poll Widget in Sidebar */}
-      <div className="pt-6 border-t border-slate-200">
+      <div className="pt-4 border-t border-slate-200">
         <PollWidget />
       </div>
-
     </div>
   );
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
       {/* Navbar */}
-      <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-          
-          {/* Logo */}
-          <div className="flex items-center gap-2 shrink-0">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-blue-200 shadow-lg">
-              R
-            </div>
-            <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500 hidden sm:block">
-              RemoteHub
-            </h1>
-          </div>
-
-          {/* Search Bar */}
-          <div className="flex-1 max-w-lg relative group">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-4 w-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
-            </div>
-            <input
-              type="text"
-              className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-full leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-100 focus:border-blue-400 transition-all sm:text-sm"
-              placeholder="搜索平台、技能或关键字..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          {/* Mobile Filter Toggle */}
-          <button 
-            className="lg:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-lg relative"
-            onClick={() => setIsMobileFilterOpen(true)}
-          >
-            <SlidersHorizontal size={20} />
-            {activeFilterCount > 0 && (
-              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-blue-600 rounded-full border-2 border-white"></span>
-            )}
-          </button>
-
-          {/* Github / About Link */}
-          <a href="#" className="hidden sm:flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-900">
-             <Globe size={16} />
-             <span>About</span>
-          </a>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
-        
-        {/* HERO SECTION: Value Proposition (FLATTENED) */}
-        <div className="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-xl p-6 mb-8 text-white shadow-lg relative overflow-hidden">
-            <div className="relative z-10 max-w-3xl">
-              <div className="inline-flex items-center gap-1.5 bg-blue-600/50 px-2.5 py-0.5 rounded-full text-[10px] font-medium text-blue-100 mb-2 border border-blue-500/50">
-                <Sparkles size={10} />
-                <span>2024 Remote Work Guide</span>
+      <nav className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-2">
+              <div className="bg-blue-600 text-white p-1.5 rounded-lg">
+                <Globe size={20} strokeWidth={2.5} />
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold mb-3 leading-tight">
-                全球远程工作机会与资源，<br/>一站式枢纽
-              </h1>
-              <p className="text-blue-100 text-sm md:text-base max-w-xl leading-relaxed opacity-90">
-                汇集 Upwork、电鸭、Toptal 等全球顶尖远程平台，提供专业的求职指南与工具，助你开启自由职业之旅。
-              </p>
+              <span className="font-bold text-xl tracking-tight text-slate-900">
+                Remote<span className="text-blue-600">Hub</span>
+              </span>
             </div>
-            {/* Abstract Background Shapes */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-24 -mt-24"></div>
-            <div className="absolute bottom-0 right-12 w-32 h-32 bg-indigo-400 opacity-10 rounded-full blur-xl"></div>
+            
+            <div className="hidden md:flex items-center gap-6">
+              <a href="#" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">首页</a>
+              <a href="#" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">关于</a>
+              <a 
+                href="https://github.com/your-repo" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 bg-slate-900 text-white px-4 py-2 rounded-full text-xs font-bold hover:bg-slate-800 transition-colors shadow-sm hover:shadow-md"
+              >
+                 GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section - Compact Version */}
+      <div className="bg-blue-900 text-white relative overflow-hidden">
+        {/* Abstract Background */}
+        <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
+           <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#FFFFFF" d="M44.7,-76.4C58.9,-69.2,71.8,-59.1,81.6,-46.6C91.4,-34.1,98.1,-19.2,95.8,-5.2C93.5,8.8,82.2,21.9,71.4,33.1C60.7,44.3,50.5,53.6,39.1,61.7C27.7,69.8,15.1,76.7,1.8,73.6C-11.5,70.5,-25.5,57.4,-38.3,46.2C-51.1,35,-62.7,25.7,-69.3,13.2C-75.9,0.7,-77.5,-15,-72.2,-28.9C-66.9,-42.8,-54.7,-54.9,-41.8,-62.7C-28.9,-70.5,-15.3,-74,0,-74C15.3,-74,30.5,-70.5,44.7,-76.4Z" transform="translate(100 100)" />
+           </svg>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
-          
-          {/* Desktop Sidebar */}
-          <aside className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-24">
-              <FilterSidebar />
-            </div>
-          </aside>
+        <div className="max-w-4xl mx-auto px-4 py-12 text-center relative z-10">
+           <h1 className="text-2xl md:text-4xl font-extrabold mb-3 tracking-tight">
+             全球远程工作机会与资源，<span className="text-blue-300">一站式枢纽</span>
+           </h1>
+           <p className="text-blue-100 text-sm md:text-base max-w-2xl mx-auto mb-6">
+             汇集全球 20+ 顶级远程招聘平台与必备工具，助你开启自由职业生涯。
+           </p>
 
-          {/* Mobile Sidebar Drawer */}
-          {isMobileFilterOpen && (
-            <div className="fixed inset-0 z-50 lg:hidden">
-              <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setIsMobileFilterOpen(false)} />
-              <div className="absolute inset-y-0 right-0 w-80 bg-white shadow-2xl p-6 overflow-y-auto animate-in slide-in-from-right duration-300">
-                <div className="flex items-center justify-between mb-8">
-                  <h2 className="text-lg font-bold">筛选条件</h2>
-                  <button onClick={() => setIsMobileFilterOpen(false)} className="p-1 hover:bg-slate-100 rounded-full">
-                    <X size={24} className="text-slate-500" />
-                  </button>
-                </div>
+           <div className="max-w-xl mx-auto relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+              <input 
+                type="text" 
+                placeholder="搜索平台、行业或关键词 (例如: Design, Crypto...)" 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 rounded-full text-slate-900 focus:outline-none focus:ring-4 focus:ring-blue-500/30 text-sm shadow-xl"
+              />
+           </div>
+           
+           {/* New Tab Navigation Buttons */}
+           <div className="flex justify-center mt-6 gap-4">
+              <button
+                onClick={() => setActiveTab('platforms')}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-bold transition-all ${
+                  activeTab === 'platforms' 
+                  ? 'bg-white text-blue-900 shadow-lg scale-105' 
+                  : 'bg-blue-800/50 text-blue-200 hover:bg-blue-800'
+                }`}
+              >
+                <LayoutGrid size={16} /> 找工作 (Platforms)
+              </button>
+              <button
+                onClick={() => setActiveTab('tools')}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-bold transition-all ${
+                  activeTab === 'tools' 
+                  ? 'bg-white text-blue-900 shadow-lg scale-105' 
+                  : 'bg-blue-800/50 text-blue-200 hover:bg-blue-800'
+                }`}
+              >
+                <Wrench size={16} /> 用工具 (Tools)
+              </button>
+           </div>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1">
+        {activeTab === 'platforms' ? (
+          /* Platforms View */
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* Mobile Filter Toggle */}
+            <div className="lg:hidden mb-4">
+              <button 
+                onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
+                className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg border border-slate-200 shadow-sm text-sm font-medium text-slate-700 w-full justify-center"
+              >
+                <SlidersHorizontal size={16} />
+                {isMobileFilterOpen ? '收起筛选' : '显示筛选'}
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              {/* Sidebar (Desktop) */}
+              <div className="hidden lg:block lg:col-span-1 sticky top-24 h-fit">
                 <FilterSidebar />
-                <div className="mt-8 pt-4 border-t border-slate-100">
-                  <button 
-                    onClick={() => setIsMobileFilterOpen(false)}
-                    className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200"
-                  >
-                    显示 {filteredPlatforms.length} 个结果
-                  </button>
+              </div>
+
+              {/* Sidebar (Mobile Drawer) */}
+              {isMobileFilterOpen && (
+                <div className="lg:hidden fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm" onClick={() => setIsMobileFilterOpen(false)}>
+                  <div className="absolute right-0 top-0 h-full w-4/5 bg-white p-6 overflow-y-auto shadow-2xl" onClick={e => e.stopPropagation()}>
+                    <div className="flex justify-between items-center mb-6">
+                      <h3 className="font-bold text-lg">筛选条件</h3>
+                      <button onClick={() => setIsMobileFilterOpen(false)}><X size={24} /></button>
+                    </div>
+                    <FilterSidebar />
+                  </div>
                 </div>
+              )}
+
+              {/* Main Grid */}
+              <div className="lg:col-span-3">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="font-bold text-slate-800 text-lg flex items-center gap-2">
+                    <Sparkles size={18} className="text-yellow-500 fill-yellow-500" /> 
+                    精选平台 <span className="text-slate-400 font-normal text-sm ml-2">({filteredPlatforms.length})</span>
+                  </h2>
+                </div>
+
+                {filteredPlatforms.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {filteredPlatforms.map(platform => (
+                      <PlatformCard key={platform.id} platform={platform} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-xl border border-dashed border-slate-300 p-12 text-center">
+                    <p className="text-slate-500 mb-2">没有找到符合条件的平台</p>
+                    <button onClick={clearFilters} className="text-blue-600 font-medium hover:underline">
+                      清空筛选条件
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
-          )}
-
-          {/* Results Grid */}
-          <div className="flex-1">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-slate-800">
-                {searchQuery ? '搜索结果' : '精选平台'} 
-                <span className="ml-2 text-sm font-normal text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
-                  {filteredPlatforms.length}
-                </span>
-              </h2>
-            </div>
-
-            {filteredPlatforms.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {filteredPlatforms.map(platform => (
-                  <PlatformCard key={platform.id} platform={platform} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-slate-300">
-                <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Search className="text-slate-400" size={32} />
-                </div>
-                <h3 className="text-lg font-medium text-slate-900 mb-1">没有找到相关平台</h3>
-                <p className="text-slate-500 text-sm mb-4">尝试调整筛选条件或搜索关键词</p>
-                <button 
-                  onClick={clearFilters}
-                  className="text-blue-600 font-medium hover:underline"
-                >
-                  清空所有筛选
-                </button>
-              </div>
-            )}
-
-            {/* Tool Section (Replaces Articles) */}
-            <ToolSection />
-
           </div>
-        </div>
-      </main>
+        ) : (
+          /* Tools View */
+          <div className="bg-slate-50 min-h-[500px]">
+             <ToolSection />
+          </div>
+        )}
+      </div>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-slate-200 bg-white py-12">
+      <footer className="bg-white border-t border-slate-200 py-10 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            {/* Brand */}
-            <div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div className="col-span-1 md:col-span-2">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
-                  R
+                <div className="bg-slate-900 text-white p-1 rounded">
+                  <Globe size={16} />
                 </div>
-                <span className="text-xl font-bold text-slate-900">RemoteHub</span>
+                <span className="font-bold text-lg text-slate-900">RemoteHub</span>
               </div>
-              <p className="text-sm text-slate-500 leading-relaxed">
-                帮助全球数字游民和远程工作者发现最好的机会。连接人才与未来工作方式。
+              <p className="text-slate-500 text-sm leading-relaxed max-w-sm">
+                致力于为全球数字游民和远程工作者提供最全面的资源导航。连接机会，打破地域限制。
               </p>
             </div>
-
-            {/* Contact */}
+            
             <div>
-              <h4 className="font-bold text-slate-900 mb-4">联系我们</h4>
-              <div className="space-y-3 text-sm text-slate-600">
-                <div className="flex items-center gap-2">
-                  <Mail size={16} className="text-slate-400" />
-                  <a href="mailto:yongzhengduan365@gmail.com" className="hover:text-blue-600">
-                    yongzhengduan365@gmail.com
-                  </a>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MessageCircle size={16} className="text-slate-400" />
-                  <span>WeChat: _41zcfirsteat</span>
-                </div>
-              </div>
+              <h4 className="font-bold text-slate-900 mb-4 text-sm">关于我们</h4>
+              <ul className="space-y-2 text-sm text-slate-500">
+                <li><a href="#" className="hover:text-blue-600">项目愿景</a></li>
+                <li><a href="#" className="hover:text-blue-600">开源贡献</a></li>
+                <li><a href="#" className="hover:text-blue-600">隐私政策</a></li>
+              </ul>
             </div>
 
-            {/* Business */}
             <div>
-              <h4 className="font-bold text-slate-900 mb-4">商务合作</h4>
-              <ul className="space-y-2 text-sm text-slate-600">
-                <li>
-                  <a href="mailto:yongzhengduan365@gmail.com?subject=Platform%20Submission" className="hover:text-blue-600 flex items-center gap-1">
-                    提交收录 <ExternalLink size={12} />
+              <h4 className="font-bold text-slate-900 mb-4 text-sm">联系与合作</h4>
+              <ul className="space-y-3 text-sm text-slate-500">
+                <li className="flex items-center gap-2">
+                  <Mail size={14} />
+                  <a href="mailto:yongzhengduan365@gmail.com" className="hover:text-blue-600 transition-colors">
+                    yongzhengduan365@gmail.com
                   </a>
                 </li>
-                <li>
-                  <a href="mailto:yongzhengduan365@gmail.com?subject=Business%20Cooperation" className="hover:text-blue-600">
-                    广告投放
+                <li className="flex items-center gap-2">
+                  <MessageCircle size={14} />
+                  <span>WeChat: _41zcfirsteat</span>
+                </li>
+                 <li className="mt-4 pt-4 border-t border-slate-100">
+                  <a href="mailto:yongzhengduan365@gmail.com?subject=商务合作/提交收录" className="inline-flex items-center gap-1 text-blue-600 font-medium hover:text-blue-700">
+                    <span>提交收录 / 商务合作</span>
+                    <ExternalLink size={12} />
                   </a>
                 </li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-slate-100 pt-8 text-center text-xs text-slate-400">
-            <p>&copy; {new Date().getFullYear()} RemoteHub. All rights reserved.</p>
+          <div className="border-t border-slate-100 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-xs text-slate-400">
+              © {new Date().getFullYear()} RemoteHub Navigator. Built with React & Gemini AI.
+            </p>
+            <div className="flex gap-4">
+               {/* Social icons could go here */}
+            </div>
           </div>
         </div>
       </footer>
 
-      {/* AI Advisor Chat Widget */}
+      {/* AI Advisor Floating Button */}
       <AiAdvisor />
     </div>
   );
