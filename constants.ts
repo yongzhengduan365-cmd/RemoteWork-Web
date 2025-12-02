@@ -1,16 +1,13 @@
 
-import { Platform } from './types';
+import { Platform, Tool, Poll } from './types';
 
 // =====================================================================
 // 🟢 管理指南：如何添加新内容
 // =====================================================================
-// 这个文件是整个网站的“数据库”。只需修改这里，网站内容就会自动更新。
 
 // ---------------------------------------------------------------------
 // 1. 行业板块 (Industries)
 // ---------------------------------------------------------------------
-// 在下方数组中添加新的行业名称（英文），它会自动出现在左侧的“行业领域”筛选器中。
-// 这里的名称必须与下方 PLATFORMS 里的 industries 字段对应。
 export const INDUSTRIES = [
   'Development',
   'Design',
@@ -20,31 +17,75 @@ export const INDUSTRIES = [
   'Customer Support',
   'Operations',
   'Sales'
-  // 示例: 在这里添加 'Data Science' 或 'Virtual Assistant'
 ];
 
 // ---------------------------------------------------------------------
-// 2. 平台列表 (Platforms)
+// 2. 远程工具箱 (Remote Tools)
 // ---------------------------------------------------------------------
-// 要添加新网站，请复制下面的 [模版对象]，修改内容后粘贴到 PLATFORMS 数组中。
-
-/* --- 复制开始 ---
+export const REMOTE_TOOLS: Tool[] = [
   {
-    id: 'unique-id-here',          // 唯一ID，英文，不要重复 (例如: 'zhilian-zhaopin')
-    name: '网站名称',               // 显示在卡片标题
-    description: '简短描述...',     // 显示在卡片正文 (建议30-50字)
-    url: 'https://example.com',    // 网站链接
-    logoColor: '#3b82f6',          // Logo背景色 (Hex颜色码)
-    platformType: 'Job Board',     // 类型 (只能选): 'Job Board'(招聘板) | 'Freelance Market'(众包) | 'Community'(社区) | 'Aggregator'(聚合)
-    industries: ['Development'],   // 行业: 必须是上面 INDUSTRIES 列表里有的词
-    jobTypes: ['Full-time'],       // 工作类型: 'Full-time' | 'Part-time' | 'Contract'(合同) | 'Freelance'(自由职业)
-    salaryTier: '$$',              // 薪资等级: '$'(入门/低) | '$$'(中等) | '$$$'(高薪)
-    tags: ['标签1', '标签2'],       // 自定义标签，显示在卡片底部
-    language: 'CN',                // 语言: 'CN'(国内) | 'EN'(国外) | 'BOTH'(都有)
-    popular: false                 // 是否显示 "POPULAR" 热门标签
+    id: 'vpn-tool',
+    name: 'G-Network 加速器',
+    description: '稳定高速的全球网络接入服务，解决 Upwork/Fiverr 等国际平台访问卡顿问题，远程工作必备。',
+    url: 'https://g0x.xyz/ltnju',
+    category: '网络工具',
+    recommended: true
   },
---- 复制结束 --- */
+  {
+    id: 'notion',
+    name: 'Notion',
+    description: 'All-in-one 生产力工具，适合整理远程工作文档、项目进度和个人知识库。',
+    url: 'https://www.notion.so/',
+    category: '协作效率'
+  },
+  {
+    id: 'wise',
+    name: 'Wise (TransferWise)',
+    description: '低费率接收美元、欧元工资的首选工具，支持提现到国内支付宝/微信。',
+    url: 'https://wise.com/',
+    category: '跨境收款'
+  },
+  {
+    id: 'zoom',
+    name: 'Zoom',
+    description: '全球最通用的视频会议软件，面试和团队沟通的标准配置。',
+    url: 'https://zoom.us/',
+    category: '沟通会议'
+  },
+  {
+    id: 'toggl',
+    name: 'Toggl Track',
+    description: '简洁的时间追踪工具，适合按小时计费的自由职业者生成工时报告。',
+    url: 'https://toggl.com/',
+    category: '时间管理'
+  },
+  {
+    id: 'deel',
+    name: 'Deel',
+    description: '全球合规薪酬支付平台，许多远程公司通过它来雇佣和支付海外员工。',
+    url: 'https://www.deel.com/',
+    category: '合规薪酬'
+  }
+];
 
+// ---------------------------------------------------------------------
+// 3. 互动投票 (Interactive Poll)
+// ---------------------------------------------------------------------
+export const POLL_DATA: Poll = {
+  id: 'poll-001',
+  question: '你目前最大的远程工作挑战是什么？',
+  totalVotes: 1240,
+  options: [
+    { id: 'opt1', label: '找不到合适的工作/项目', votes: 540 },
+    { id: 'opt2', label: '孤独感与缺乏社交', votes: 210 },
+    { id: 'opt3', label: '工作与生活界限模糊', votes: 380 },
+    { id: 'opt4', label: '时差与异步沟通困难', votes: 110 }
+  ]
+};
+
+// ---------------------------------------------------------------------
+// 4. 平台列表 (Platforms)
+// ---------------------------------------------------------------------
 export const PLATFORMS: Platform[] = [
   // --- 国内平台 (CN Platforms) ---
   {

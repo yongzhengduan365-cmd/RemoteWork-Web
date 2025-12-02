@@ -1,10 +1,117 @@
 
 import React, { useState, useMemo } from 'react';
-import { Search, Briefcase, Filter, X, SlidersHorizontal, Check, Mail, Globe, MessageCircle, ExternalLink } from 'lucide-react';
-import { PLATFORMS, INDUSTRIES } from './constants';
+import { Search, Filter, X, SlidersHorizontal, Check, Mail, Globe, MessageCircle, ExternalLink, Sparkles, Hammer, BarChart, Zap } from 'lucide-react';
+import { PLATFORMS, INDUSTRIES, REMOTE_TOOLS, POLL_DATA } from './constants';
 import { JobType, PlatformType, SalaryTier } from './types';
 import PlatformCard from './components/PlatformCard';
 import AiAdvisor from './components/AiAdvisor';
+
+// --- Sub-components for better organization ---
+
+const PollWidget = () => {
+  const [hasVoted, setHasVoted] = useState(false);
+  const [localPoll, setLocalPoll] = useState(POLL_DATA);
+
+  const handleVote = (optionId: string) => {
+    if (hasVoted) return;
+    
+    // Simulate updating votes locally
+    const updatedOptions = localPoll.options.map(opt => 
+      opt.id === optionId ? { ...opt, votes: opt.votes + 1 } : opt
+    );
+    
+    setLocalPoll({
+      ...localPoll,
+      options: updatedOptions,
+      totalVotes: localPoll.totalVotes + 1
+    });
+    setHasVoted(true);
+  };
+
+  return (
+    <div className="bg-white rounded-xl border border-blue-100 p-5 shadow-sm">
+      <div className="flex items-center gap-2 mb-4">
+        <BarChart size={18} className="text-blue-600" />
+        <h4 className="font-bold text-slate-900 text-sm">每周话题</h4>
+      </div>
+      <p className="text-sm text-slate-700 font-medium mb-4">{localPoll.question}</p>
+      
+      <div className="space-y-3">
+        {localPoll.options.map((opt) => {
+          const percentage = Math.round((opt.votes / localPoll.totalVotes) * 100);
+          return (
+            <button
+              key={opt.id}
+              onClick={() => handleVote(opt.id)}
+              disabled={hasVoted}
+              className="w-full relative group"
+            >
+              {/* Progress Bar Background */}
+              {hasVoted && (
+                <div 
+                  className="absolute top-0 left-0 h-full bg-blue-50 rounded-lg transition-all duration-500 ease-out" 
+                  style={{ width: `${percentage}%` }}
+                />
+              )}
+              
+              <div className={`relative z-10 flex items-center justify-between px-3 py-2 rounded-lg border text-xs transition-colors ${
+                 hasVoted ? 'border-transparent' : 'border-slate-200 hover:border-blue-400 hover:bg-slate-50'
+              }`}>
+                <span className="text-slate-700">{opt.label}</span>
+                {hasVoted && <span className="font-bold text-blue-600">{percentage}%</span>}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+      
+      <div className="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-400 flex justify-between">
+        <span>{localPoll.totalVotes.toLocaleString()} 人参与</span>
+        {hasVoted && <span className="text-green-600">感谢您的投票！</span>}
+      </div>
+    </div>
+  );
+};
+
+const ToolSection = () => (
+  <div className="mt-12 mb-8">
+    <div className="flex items-center gap-2 mb-4">
+      <Hammer className="text-blue-600" size={20} />
+      <h2 className="text-xl font-bold text-slate-900">远程工作必备工具</h2>
+    </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {REMOTE_TOOLS.map((tool) => (
+        <a 
+          key={tool.id} 
+          href={tool.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`block bg-white rounded-xl border p-4 hover:shadow-lg hover:-translate-y-0.5 transition-all group ${
+            tool.recommended ? 'border-blue-300 ring-1 ring-blue-100' : 'border-slate-200'
+          }`}
+        >
+          <div className="flex items-start justify-between mb-2">
+            <div className={`text-xs font-bold px-2 py-1 rounded-md mb-2 inline-block ${
+              tool.recommended ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600'
+            }`}>
+              {tool.category}
+            </div>
+            {tool.recommended && <Zap size={14} className="text-amber-500 fill-amber-500" />}
+          </div>
+          
+          <h3 className={`font-bold text-sm mb-1 ${tool.recommended ? 'text-blue-700' : 'text-slate-900'}`}>
+            {tool.name}
+          </h3>
+          <p className="text-xs text-slate-600 mb-3 leading-relaxed h-10 line-clamp-2">{tool.description}</p>
+          <div className="text-[10px] text-slate-400 flex items-center gap-1 group-hover:text-blue-600 transition-colors">
+             <span>访问官网</span>
+             <ExternalLink size={10} />
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+);
 
 const App: React.FC = () => {
   // State for Filters
@@ -201,6 +308,12 @@ const App: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Interactive Poll Widget in Sidebar */}
+      <div className="pt-6 border-t border-slate-200">
+        <PollWidget />
+      </div>
+
     </div>
   );
 
@@ -245,7 +358,7 @@ const App: React.FC = () => {
             )}
           </button>
 
-          {/* Github / About Link (Placeholder) */}
+          {/* Github / About Link */}
           <a href="#" className="hidden sm:flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-900">
              <Globe size={16} />
              <span>About</span>
@@ -254,7 +367,27 @@ const App: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
+        
+        {/* HERO SECTION: Value Proposition (FLATTENED) */}
+        <div className="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-xl p-6 mb-8 text-white shadow-lg relative overflow-hidden">
+            <div className="relative z-10 max-w-3xl">
+              <div className="inline-flex items-center gap-1.5 bg-blue-600/50 px-2.5 py-0.5 rounded-full text-[10px] font-medium text-blue-100 mb-2 border border-blue-500/50">
+                <Sparkles size={10} />
+                <span>2024 Remote Work Guide</span>
+              </div>
+              <h1 className="text-2xl md:text-3xl font-bold mb-3 leading-tight">
+                全球远程工作机会与资源，<br/>一站式枢纽
+              </h1>
+              <p className="text-blue-100 text-sm md:text-base max-w-xl leading-relaxed opacity-90">
+                汇集 Upwork、电鸭、Toptal 等全球顶尖远程平台，提供专业的求职指南与工具，助你开启自由职业之旅。
+              </p>
+            </div>
+            {/* Abstract Background Shapes */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-24 -mt-24"></div>
+            <div className="absolute bottom-0 right-12 w-32 h-32 bg-indigo-400 opacity-10 rounded-full blur-xl"></div>
+        </div>
+
         <div className="flex flex-col lg:flex-row gap-8">
           
           {/* Desktop Sidebar */}
@@ -292,7 +425,7 @@ const App: React.FC = () => {
           <div className="flex-1">
             <div className="mb-6 flex items-center justify-between">
               <h2 className="text-xl font-bold text-slate-800">
-                {searchQuery ? '搜索结果' : '所有平台'} 
+                {searchQuery ? '搜索结果' : '精选平台'} 
                 <span className="ml-2 text-sm font-normal text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
                   {filteredPlatforms.length}
                 </span>
@@ -320,78 +453,73 @@ const App: React.FC = () => {
                 </button>
               </div>
             )}
+
+            {/* Tool Section (Replaces Articles) */}
+            <ToolSection />
+
           </div>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-slate-200 bg-white pt-12 pb-8">
+      <footer className="mt-auto border-t border-slate-200 bg-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-12">
-            
-            {/* Brand Section */}
-            <div className="col-span-1">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            {/* Brand */}
+            <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">R</div>
-                <span className="font-bold text-slate-800 text-lg">RemoteHub</span>
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                  R
+                </div>
+                <span className="text-xl font-bold text-slate-900">RemoteHub</span>
               </div>
-              <p className="text-sm text-slate-500 leading-relaxed mb-6">
-                致力于为全球数字游民、自由职业者和远程工作者提供最全面的平台导航服务。发现机会，连接世界。
+              <p className="text-sm text-slate-500 leading-relaxed">
+                帮助全球数字游民和远程工作者发现最好的机会。连接人才与未来工作方式。
               </p>
-              <div className="text-xs text-slate-400">
-                &copy; {new Date().getFullYear()} RemoteHub. All rights reserved.
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h4 className="font-bold text-slate-900 mb-4">联系我们</h4>
+              <div className="space-y-3 text-sm text-slate-600">
+                <div className="flex items-center gap-2">
+                  <Mail size={16} className="text-slate-400" />
+                  <a href="mailto:yongzhengduan365@gmail.com" className="hover:text-blue-600">
+                    yongzhengduan365@gmail.com
+                  </a>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MessageCircle size={16} className="text-slate-400" />
+                  <span>WeChat: _41zcfirsteat</span>
+                </div>
               </div>
             </div>
 
-            {/* Contact Section - UPDATED */}
-            <div className="col-span-1">
-              <h4 className="font-bold text-slate-900 mb-4">联系我们 / Contact</h4>
-              <div className="space-y-3">
-                 <div className="flex items-start gap-3 text-sm text-slate-600 group">
-                    <Mail size={18} className="text-slate-400 group-hover:text-blue-500 mt-0.5 transition-colors" />
-                    <div>
-                      <div className="text-xs text-slate-400 mb-0.5">Email</div>
-                      <a href="mailto:yongzhengduan365@gmail.com" className="hover:text-blue-600 font-medium transition-colors break-all">
-                        yongzhengduan365@gmail.com
-                      </a>
-                    </div>
-                 </div>
-                 <div className="flex items-start gap-3 text-sm text-slate-600 group">
-                    <MessageCircle size={18} className="text-slate-400 group-hover:text-green-500 mt-0.5 transition-colors" />
-                    <div>
-                      <div className="text-xs text-slate-400 mb-0.5">WeChat</div>
-                      <span className="font-medium hover:text-green-600 transition-colors cursor-text selection:bg-green-100">
-                        _41zcfirsteat
-                      </span>
-                    </div>
-                 </div>
-              </div>
-            </div>
-
-            {/* Cooperation & Links */}
-            <div className="col-span-1">
-              <h4 className="font-bold text-slate-900 mb-4">商务合作 / Business</h4>
-              <ul className="space-y-3 text-sm">
+            {/* Business */}
+            <div>
+              <h4 className="font-bold text-slate-900 mb-4">商务合作</h4>
+              <ul className="space-y-2 text-sm text-slate-600">
                 <li>
-                  <a href="mailto:yongzhengduan365@gmail.com?subject=Platform Submission" className="flex items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors">
-                    <Check size={16} className="text-blue-500" />
-                    <span>提交新平台收录</span>
+                  <a href="mailto:yongzhengduan365@gmail.com?subject=Platform%20Submission" className="hover:text-blue-600 flex items-center gap-1">
+                    提交收录 <ExternalLink size={12} />
                   </a>
                 </li>
-                 <li>
-                  <a href="mailto:yongzhengduan365@gmail.com?subject=Business Inquiry" className="flex items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors">
-                    <ExternalLink size={16} className="text-blue-500" />
-                    <span>广告与置顶合作</span>
+                <li>
+                  <a href="mailto:yongzhengduan365@gmail.com?subject=Business%20Cooperation" className="hover:text-blue-600">
+                    广告投放
                   </a>
                 </li>
               </ul>
             </div>
-
+          </div>
+          
+          <div className="border-t border-slate-100 pt-8 text-center text-xs text-slate-400">
+            <p>&copy; {new Date().getFullYear()} RemoteHub. All rights reserved.</p>
           </div>
         </div>
       </footer>
 
-      {/* AI Assistant */}
+      {/* AI Advisor Chat Widget */}
       <AiAdvisor />
     </div>
   );

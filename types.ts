@@ -23,3 +23,27 @@ export interface ChatMessage {
   text: string;
   timestamp: number;
 }
+
+// Remote Work Tools
+export interface Tool {
+  id: string;
+  name: string;
+  description: string;
+  category: string; // e.g., 'Network', 'Productivity', 'Finance'
+  url: string;
+  recommended?: boolean; // Highlight specifically (e.g. for the VPN)
+}
+
+// Interactive Poll
+export interface PollOption {
+  id: string;
+  label: string;
+  votes: number;
+}
+
+export interface Poll {
+  id: string;
+  question: string;
+  options: PollOption[];
+  totalVotes: number;
+}
