@@ -103,16 +103,16 @@ export const PLATFORMS: Platform[] = [
     language: 'CN'
   },
   {
-    id: 'sweet-salary',
-    name: '甜薪工场',
-    description: '连接企业和远程人才的平台，覆盖开发、设计、市场等多个领域。',
-    url: 'https://www.tiantask.com',
-    logoColor: '#f43f5e',
+    id: 'freehunter',
+    name: 'Freehunter',
+    description: '香港最大的自由职业者平台，连接创意人才与企业客户，涵盖设计、IT、市场营销等多个领域。',
+    url: 'https://freehunter.hk/',
+    logoColor: '#f95f5f',
     platformType: 'Freelance Market',
-    industries: ['Development', 'Design', 'Marketing', 'Writing'],
-    jobTypes: ['Freelance', 'Part-time'],
-    salaryTier: '$',
-    tags: ['兼职', '众包', '灵活用工'],
+    industries: ['Design', 'Marketing', 'Development', 'Writing'],
+    jobTypes: ['Freelance'],
+    salaryTier: '$$',
+    tags: ['香港', '自由职业', '创意'],
     language: 'CN'
   },
   {
@@ -143,6 +143,20 @@ export const PLATFORMS: Platform[] = [
   },
 
   // --- 全球平台 (Global Platforms) ---
+  {
+    id: 'data-annotation',
+    name: 'DataAnnotation',
+    description: '参与 AI 模型训练项目，工作内容包括编程、创意写作和数据标注。工作时间灵活，报酬丰厚。',
+    url: 'https://www.dataannotation.tech/',
+    logoColor: '#2d3748',
+    platformType: 'Freelance Market',
+    industries: ['Development', 'Writing'],
+    jobTypes: ['Freelance', 'Part-time'],
+    salaryTier: '$$',
+    tags: ['AI', '数据标注', '高薪'],
+    popular: true,
+    language: 'EN'
+  },
   {
     id: 'upwork',
     name: 'Upwork',
