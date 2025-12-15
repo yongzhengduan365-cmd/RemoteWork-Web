@@ -27,7 +27,7 @@ export const REMOTE_TOOLS: Tool[] = [
     id: 'vpn-tool',
     name: 'G-Network 加速器',
     description: '稳定高速的全球网络接入服务，解决 Upwork/Fiverr 等国际平台访问卡顿问题，远程工作必备。',
-    url: 'https://g0x.xyz/ltnju',
+    url: 'https://get.affiliatescn.net/aff_c?offer_id=153&aff_id=136572&url_id=613',
     category: '网络工具',
     recommended: true
   },
